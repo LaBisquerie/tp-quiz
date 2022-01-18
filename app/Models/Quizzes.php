@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Quizzes extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'id',
+        'label',
+        'published',
+    ];
 }
