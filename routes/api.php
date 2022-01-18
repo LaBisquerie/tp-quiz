@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\QuizzesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,4 +26,8 @@ Route::group([
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/user-profile', [AuthController::class, 'userProfile']);
+    Route::get('/new-quiz', [QuizzesController::class, 'newQuiz']);
+    Route::get('/edit-quiz', [QuizzesController::class, 'editQuiz']);
+    Route::get('/remove-quiz', [QuizzesController::class, 'removeQuiz']);
+    Route::get('/show-quiz', [QuizzesController::class, 'showQuiz']);
 });
