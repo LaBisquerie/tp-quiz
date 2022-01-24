@@ -3,93 +3,77 @@
 namespace App\Http\Controllers;
 
 use App\Models\Quizzes;
+use App\Models\Question;
+use App\Models\Choice;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class QuizzesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function getQuizzes()
     {
         return response()->json(Quizzes::all());
-        // return Quizzes::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function getQuestions($id) {
+        $question = Question::where('quiz_id', $id);
+        return response()->json($question->get());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreQuizzesRequest  $request
-     * @return \Illuminate\Http\Response
-     */
     public function addQuiz(Request $request)
     {
-        $validate = $request->validate([
-            'id' => 'required',
-            'label' => 'required',
-            'published' => 'required',
-        ]);
+        $quizzes = Quizzes::create($request->all());
+        $question = $request['questions']; // On get les questions
 
-        $quizzes = Quizzes::create($validate);
+        foreach($question as $item){
+            $quest = Question::create([
+                'label' => $item['label'],
+                'earnings' => $item['earnings'],
+                'quiz_id' => $quizzes->id,
+            ]);
+
+            foreach($item['choices'] as $item2){
+                $choix = Choice::create([
+                    'label' => $item2['label'],
+                    'question_id' => $quest->id,
+                ]);
+
+                if($item2['id'] == $item['answer']){
+                    $quest['answer'] = $choix->id;
+                    $quest->save();
+                }
+            };
+        }
 
         return response()->json('Quiz créer');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Quizzes  $quizzes
-     * @return \Illuminate\Http\Response
-     */
     public function getQuiz($id)
     {
         $quizzes = Quizzes::find($id);
         return response()->json($quizzes);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Quizzes  $quizzes
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Quizzes $quizzes)
+    public function getUser($userId)
     {
-        //
+        $id = User::find($userId);
+        return $id;
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\Request  $request
-     * @param  \App\Models\Quizzes  $quizzes
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function editQuiz(Request $request, $id)
     {
-        $quizzes = Quizzes::find($id);
-        $quizzes->update($request->all());
-        return response()->json($quizzes);
+        $quizzes = Quizzes::find($id); // On récupère le current quizz
+        $question = Question::where("quiz_id", $id)->get(); // On récupère les questions du current quizz
+
+        foreach($question as $q){ // On récupère les choix
+            Choice::where("question_id", $q['id'])->delete();
+        }
+        Question::where("quiz_id", $id)->delete();
+        $quizzes->delete();
+
+        return $this->addQuiz($request);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Quizzes  $quizzes
-     * @return \Illuminate\Http\Response
-     */
     public function removeQuiz($id)
     {
         $quizzes = Quizzes::find($id);
