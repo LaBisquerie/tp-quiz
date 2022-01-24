@@ -1,66 +1,79 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+<h3 align="center">README</h3>
+<p>TP réalisé avec Raphael Cappiello</p>
+<p>Afin de tester directement dans postman voir le fichier api.php</p>
+<h3 align="center">EXPLICATION DES ROUTES</h3>
+<h4>Côté administrateur</h4>
+<ul>
+    <li>Pour créer l'administrateur il suffit juste de créer un compte (via front ou postman) et le premier User créer sera élevé au rang d'administrateur</li>
+    <li>
+        Route::post('/quiz', [QuizzesController::class, 'addQuiz']); ➡️ Créer un quizz (A noter que par défault chaque quiz créer ne sera pas publié, l'administrateur devra le         publier)
+        <br>
+        Exemple de data pour créer un quiz via postman : (body -> raw -> json)
+        <br>
+        {
+    "label": "Quizz 5",
+    "published": false,
+    "questions": [
+        {
+            "id": "16430425539070.30827847407386066",
+            "label": "1+2",
+            "earnings": 4,
+            "answer": "16430425960730.47297094090589753",
+            "choices": [
+                {
+                    "id": "16430425960730.47297094090589753",
+                    "label": "3"
+                },
+                {
+                    "id": "16430425967620.7363334986037968",
+                    "label": "6"
+                },
+                {
+                    "id": "16430425994630.20038234761323204",
+                    "label": "9"
+                }
+            ]
+        },
+        {
+            "id": "16430425549330.4947917653036076",
+            "label": "8+4",
+            "earnings": 8,
+            "answer": "16430426157140.20787204980211627",
+            "choices": [
+                {
+                    "id": "16430426133240.14710756130179048",
+                    "label": "8"
+                },
+                {
+                    "id": "16430426157140.20787204980211627",
+                    "label": "12"
+                },
+                {
+                    "id": "16430426163950.36202231617559577",
+                    "label": "5"
+                }
+            ]
+        }
+    ]
+}
+    </li>
+    <li>Route::put('/quiz/{id}', [QuizzesController::class, 'editQuiz']); ➡️ Editer un quizz</li>
+    <li>Route::delete('/quiz/{id}', [QuizzesController::class, 'removeQuiz']); ➡️ Supprimer un quizz</li> 
+    <li>Route::put('/quiz/{id}/publish', [QuizzesController::class, 'publishQuiz']); ➡️ Publier un quizz</li>
+    <li>Route::put('/quiz/{id}/unpublish', [QuizzesController::class, 'unpublishQuiz']); ➡️ Dépublier un quizz</li>
+    <li>Route::get('/quiz/{id}', [QuizzesController::class, 'getQuiz']); ➡️ Voir un quizz précisement</li>
+    <li>Route::get('/user/{userId}', [QuizzesController::class, 'getUser']); ➡️ Récupérer les donneés d'un utilisateur</li>
+    <li>Route::get('/quiz/{id}/questions', [QuizzesController::class, 'getQuestions']); ➡️ Récupérer les questions d'un quiz choisi</li>
+</ul>
+<h4>Côté utilisateur/participant</h4>
+<ul>
+    <li>Pour créer un utilisateur classique, il suffit juste de créer un compte (via front ou postman) après avoir déjà créer un compte(car le premier compte est l'admin)</li>
+    <li>Route::get('/quiz', [QuizzesController::class, 'getQuizzes']); ➡️ Voir les quizzs (sur le front notamment)</li>
+    <li>Route::post('/score', [ScoreController::class, 'submitQuiz']); ➡️ Enregistrer ses choix à la fin du quiz</li>
+    <li>Route::get('/score', [ScoreController::class, 'getScores']); ➡️ Voir les scores du quiz</li>*
+</ul>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[CMS Max](https://www.cmsmax.com/)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-- **[Romega Software](https://romegasoftware.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
