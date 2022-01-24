@@ -45,7 +45,7 @@ class QuizzesController extends Controller
             };
         }
 
-        return response()->json('Quiz créer');
+        return response()->json($request);
     }
 
     public function getQuiz($id)
